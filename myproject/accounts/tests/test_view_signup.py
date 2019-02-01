@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
-from .views import signup
-from django.contrib.auth.forms import UserCreationForm
+from ..views import signup
+from ..forms import SignupForm
 from django.contrib.auth.models import User
 # Create your tests here.
 
@@ -22,7 +22,7 @@ class SignUpTests(TestCase):
 
     def test_contains_form(self):
         form = self.response.context.get('form')
-        self.assertIsInstance(form, UserCreationForm)
+        self.assertIsInstance(form, SignupForm)
 
     def test_form_inputs(self):
         '''the view musr contains five inputs : csrf, username, email
