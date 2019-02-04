@@ -148,4 +148,4 @@ class PasswordResetCompleteTests(TestCase):
     def test_view_function(self):
         view = resolve('/reset/complete/')
         self.assertAlmostEquals(view.func.view_class, auth_views.PasswordResetCompleteView)
-        
+      
