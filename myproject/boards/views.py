@@ -4,15 +4,16 @@ from django.contrib.auth.decorators import login_required
 from .models import Board, Topic, Post
 from .forms import NewTopicForm, PostForm
 from django.db.models import Count
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, ListView
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 
 # Create your views here.
 
-def home(request):
-    boards = Board.objects.all()       
-    return render(request, 'home.html', {'boards':boards})
+class BoardListView(ListView):
+    model = Board
+    context_object_name = 'boards'
+    template_name = 'home.html'
 
 def board_topics(request, pk):
     board = get_object_or_404(Board, pk=pk)
@@ -73,7 +74,7 @@ class PostUpdateView(UpdateView):
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.filter(created_by=self.request.user)
-        
+
     def form_valid(self, form):
         post = form.save(commit=False)
         post.updated_by = self.request.user

@@ -22,7 +22,7 @@ from accounts import views as accounts_views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('', views.BoardListView.as_view(), name='home'),
     path('admin/', admin.site.urls),
     path('boards/<int:pk>/', views.board_topics, name="board_topics"),
     path('boards/<int:pk>/new/', views.new_topic,name='new_topic'),
