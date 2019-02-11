@@ -71,6 +71,7 @@ TEMPLATES = [
             ],
             'libraries': {
                 'form_tags' : 'boards.templatetags.form_tags',
+                'gravatar' : 'boards.templatetags.gravatar',
             }
         },
     },
