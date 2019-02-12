@@ -12,19 +12,21 @@ class Board(models.Model):
 
     def __str__(self):
         return self.name
-    
+
     def get_posts_count(self):
         return Post.objects.filter(topic__board=self).count()
 
     def get_last_post(self):
-        return Post.objects.filter(topic__board=self).order_by('-created_at').first()
+        return Post.objects.filter(topic__board=self).order_by("-created_at").first()
+
+
 class Topic(models.Model):
     subject = models.CharField(max_length=225)
     last_updated = models.DateTimeField(auto_now_add=True)
-    board = models.ForeignKey(Board, on_delete = models.CASCADE, related_name='topics')
-    starter = models.ForeignKey(User, on_delete = models.CASCADE, related_name='Topics')
+    board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name="topics")
+    starter = models.ForeignKey(User, on_delete=models.CASCADE, related_name="Topics")
     views = models.PositiveIntegerField(default=0)
-    
+
     def __str__(self):
         return self.subject
 
@@ -34,26 +36,30 @@ class Topic(models.Model):
         return math.ceil(pages)
 
     def has_many_pages(self, count=None):
-        if count is None :
+        if count is None:
             count = self.get_page_count()
         return count > 6
 
     def get_page_range(self):
         count = self.get_page_count()
         if self.has_many_pages(count):
-            return range(1,5)
+            return range(1, 5)
         return range(1, count + 1)
+
 
 class Post(models.Model):
     message = models.TextField(max_length=4000)
-    topic = models.ForeignKey(Topic, on_delete = models.CASCADE, related_name='posts')
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name="posts")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True)
-    created_by = models.ForeignKey(User, on_delete = models.CASCADE, related_name='posts')
-    updated_by = models.ForeignKey(User, on_delete = models.CASCADE, null=True, related_name='+')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
+    updated_by = models.ForeignKey(
+        User, on_delete=models.CASCADE, null=True, related_name="+"
+    )
+
     def __str__(self):
         truncated_message = Truncator(self.message)
         return truncated_message.chars(30)
+
     def get_message_as_markdown(self):
-        return mark_safe(markdown(self.message, safe_mode='escape'))
-        
+        return mark_safe(markdown(self.message, safe_mode="escape"))
